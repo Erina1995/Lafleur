@@ -25,15 +25,15 @@ for item in zin.infolist():
             r=int(rnum)
             if r==1: continue
             vals={}
-            for col in 'HIJK':
+            for col in 'IJKL':
                 m=re.search(r'<c r="%s%d"[^>]*><v>([^<]*)</v>'%(col,r),rxml)
                 if m: vals[col]=float(m.group(1))
-            pts=[vals[c] for c in 'HIJK' if c in vals]
+            pts=[vals[c] for c in 'IJKL' if c in vals]
             if not pts: continue
-            price=next(vals[c] for c in 'HIJK' if c in vals)
+            price=next(vals[c] for c in 'IJKL' if c in vals)
             med=median(pts); red=round(med*(1-disc)+1e-9,2)
             new=rxml
-            for col,v in (('B',price),('C',med),('D',red)):
+            for col,v in (('B',price),('C',med),('D',red),('E',red)):
                 new,n=re.subn(r'(<c r="%s%d"[^>]*>)(<f>.*?</f>)<v ?/>'%(col,r),lambda m:f'{m.group(1)}{m.group(2)}<v>{v!r}</v>',new,count=1)
                 total+=n
             if new!=rxml: xml=xml.replace(rxml,new,1)

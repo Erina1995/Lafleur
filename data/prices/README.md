@@ -8,8 +8,9 @@ with **File > Import** (or upload it to Google Drive and open it with Sheets).
 Sheets:
 
 - **Prices** – Box / Pack / Coffret products. Columns: Name, Price, Median Price, Reduced
-  (30 % off the median, driven by the `Settings!B2` discount cell), then Game, Category,
-  Set, the raw price points from each site, and links.
+  (30 % off the median, driven by the `Settings!B2` discount cell), Kraken Price (median
+  minus the Kraken discount in `Settings!B3`, 30 % by default), then Game, Category, Set,
+  the raw price points from each site, and links.
 - **Other Sealed** – decks, cases/displays and accessories, same layout.
 - **Settings** – discount percentage and notes on how prices are computed.
 
