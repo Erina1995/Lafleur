@@ -2,7 +2,7 @@
 
 `pokemon-onepiece-sealed-prices.xlsx` (and the same main sheet as CSV) lists sealed
 Pokemon and One Piece Card Game products (boxes, packs, coffrets) with prices from
-PriceCharting and TCGplayer, collected on 2026-10-06. Import the .xlsx into Google Sheets
+PriceCharting and TCGplayer, collected on 2026-10-07. Import the .xlsx into Google Sheets
 with **File > Import** (or upload it to Google Drive and open it with Sheets).
 
 Sheets:
