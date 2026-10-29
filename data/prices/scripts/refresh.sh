@@ -2,7 +2,7 @@
 # Re-collect PriceCharting + TCGplayer prices and rebuild the sheet files in data/prices/.
 set -euo pipefail
 cd "$(dirname "$0")"
-python3 -c "import openpyxl" 2>/dev/null || pip install -q openpyxl
+python3 -c "import openpyxl" 2>/dev/null || python3 -m pip install -q openpyxl
 python3 pc_scrape.py pokemon &
 python3 pc_scrape.py onepiece &
 python3 tcg_scrape.py &
