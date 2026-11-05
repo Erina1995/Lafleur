@@ -10,17 +10,24 @@ def post(body,tries=4):
     return None
 allp=[]
 for ln,label in lines.items():
-    frm=0
+    frm=0; expected=0; empties=0
     while True:
         body={"algorithm":"sales_synonym_v2","from":frm,"size":50,"filters":{"term":{"productLineName":[ln],"productTypeName":["Sealed Products"]},"range":{},"match":{}},"listingSearch":{"context":{"cart":{}},"filters":{"term":{"sellerStatus":"Live","channelId":0},"range":{"quantity":{"gte":1}},"exclude":{"channelExclusion":0}}},"context":{"cart":{},"shippingCountry":"US"},"settings":{"useFuzzySearch":True,"didYouMean":{}},"sort":{}}
         d=post(body)
         if not d: break
         r=d["results"][0]; total=r.get("totalResults",0)
+        if not r["results"] and frm<expected:
+            # transient empty page from the API: retry a few times before giving up
+            empties=empties+1
+            if empties<=3:
+                print("empty page at",frm,"retrying",file=sys.stderr,flush=True); time.sleep(3*empties); continue
+            print("FAIL empty page at",frm,"for",label,file=sys.stderr,flush=True); break
+        empties=0; expected=max(expected,total)
         for p in r["results"]:
             allp.append({"line":label,"productId":int(p["productId"]),"name":p["productName"],"set":p.get("setName"),"setUrl":p.get("setUrlName"),"productUrl":p.get("productUrlName"),"market":p.get("marketPrice"),"median":p.get("medianPrice"),"lowest":p.get("lowestPrice"),"lowestShip":p.get("lowestPriceWithShipping"),"listings":p.get("totalListings"),"release":(p.get("customAttributes") or {}).get("releaseDate")})
         print(label,frm,"/",total,file=sys.stderr,flush=True)
         frm+=50
-        if frm>=total or not r["results"]: break
+        if frm>=expected: break
         time.sleep(0.4)
 json.dump(allp,open("tcg_all.json","w"))
 print("TOTAL",len(allp),file=sys.stderr)
